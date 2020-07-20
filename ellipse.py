@@ -60,7 +60,7 @@ banner("PRIORS")
 priors = {
     'x0': gv.gvar('10(3)'),
     'y0': gv.gvar('12(2)'),
-    'phi': gv.gvar('0(3)'),
+    'phi': gv.gvar('0(0.78)'),
     'a':  gv.gvar('2(2)'),
     'b':  gv.gvar('2(2)'),
 }
