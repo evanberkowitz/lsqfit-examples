@@ -36,8 +36,8 @@ sample = np.sort(np.mod(rng.normal(0,100, size=POINTS), 2*np.pi))
 (X, Y) = e(sample)
 
 # Offsets
-bumpX = 0.2*(2*rng.random(size=POINTS)-1)
-bumpY = 0.2*(2*rng.random(size=POINTS)-1)
+bumpX = 0.15*(2*rng.random(size=POINTS)-1)
+bumpY = 0.15*(2*rng.random(size=POINTS)-1)
 # Uncertainties
 eX = rng.normal(0.15, 0.05, size=POINTS)
 eY = rng.normal(0.15, 0.05, size=POINTS)
