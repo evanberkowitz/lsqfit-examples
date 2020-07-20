@@ -114,14 +114,19 @@ print("That isn't so bad, just plug the fit results to get a new ellipse.")
 best_fit = ellipse(fit.p['a'], fit.p['b'], fit.p['phi'], fit.p['x0'], fit.p['y0'])
 result = best_fit(theta)
 # Turn gvars in floats
+sdev   = np.array([[x.sdev for x in r] for r in result])
 result = np.array([[x.mean for x in r] for r in result])
 
 fig, ax = plt.subplots()
+for sigma in [0,1,2]:
+    ax.plot(*(result+sigma*sdev), linestyle='none', marker='.')
+    ax.plot(*(result-sigma*sdev), linestyle='none', marker='.', color=ax.lines[-1].get_color())
+ax.plot(*exact, linestyle='none', marker='.', color='black')
 ax.errorbar([x.mean for x in X], [y.mean for y in Y], xerr = [x.sdev for x in X], yerr = [y.sdev for y in Y],
         linestyle='none',
         color='black',
+        zorder = 10,
         )
-ax.plot(*result, linestyle='none', marker='.')
 ax.set_title("Best-fit ellipse and data points")
 ax.set_xlim(6.5, 13.5)
 ax.set_ylim(10.5, 13.5)
