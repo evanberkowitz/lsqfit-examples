@@ -45,16 +45,16 @@ eY = rng.normal(0.15, 0.05, size=len(Y))
 X = np.array([gv.gvar(x+dx, ex) for x, dx, ex in zip(X, bumpX, eX)])
 Y = np.array([gv.gvar(y+dy, ey) for y, dy, ey in zip(Y, bumpY, eY)])
 
-plt.errorbar([x.mean for x in X], [y.mean for y in Y], xerr = [x.sdev for x in X], yerr = [y.sdev for y in Y],
-        linestyle='none',
-        color='black',
-        )
-plt.plot(*exact, linestyle='none', marker='.')
-plt.title("Exact ellipse and data points")
-plt.xlim(6.5, 13.5)
-plt.ylim(10.5, 13.5)
+#plt.errorbar([x.mean for x in X], [y.mean for y in Y], xerr = [x.sdev for x in X], yerr = [y.sdev for y in Y],
+#        linestyle='none',
+#        color='black',
+#        )
+#plt.plot(*exact, linestyle='none', marker='.')
+#plt.title("Exact ellipse and data points")
+#plt.xlim(6.5, 13.5)
+#plt.ylim(10.5, 13.5)
 
-print("Looking at that figure, we come up with...")
+#print("Looking at that figure, we come up with...")
 
 banner("PRIORS")
 priors = {
