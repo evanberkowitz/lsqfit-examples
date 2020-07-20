@@ -13,7 +13,7 @@ def banner(message):
 def ellipse(a, b, phi=0, x0=0, y0=0):
     def curried(theta):
         return [
-                x0 + a*np.cos(theta)*np.cos(phi) + b*np.sin(theta)*np.sin(phi),
+                x0 + a*np.cos(theta)*np.cos(phi) - b*np.sin(theta)*np.sin(phi),
                 y0 + b*np.sin(theta)*np.cos(phi) + a*np.cos(theta)*np.sin(phi)
                ]
     return curried
@@ -62,7 +62,7 @@ priors = {
     'y0': gv.gvar('12(2)'),
     'phi': gv.gvar('0(3)'),
     'a':  gv.gvar('2(2)'),
-    'b':  gv.gvar('1(1)'),
+    'b':  gv.gvar('2(2)'),
 }
 
 for p in priors:
