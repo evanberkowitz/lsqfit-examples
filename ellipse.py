@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import gvar as gv
 import lsqfit as lsf
 import numpy as np
@@ -105,6 +107,7 @@ print(fit)
 banner("VISUALIZATION")
 
 print("Now we would like to visualize the best-fit ellipse.")
+print("That isn't so bad, just plug the fit results to get a new ellipse.")
 
 best_fit = ellipse(fit.p['a'], fit.p['b'], fit.p['phi'], fit.p['x0'], fit.p['y0'])
 result = best_fit(theta)
