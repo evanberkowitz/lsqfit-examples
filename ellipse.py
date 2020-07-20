@@ -29,8 +29,10 @@ e = ellipse(a, b, phi, x0, y0)
 exact = e(theta)
 
 # Make up random thetas
-rng = np.random.default_rng(seed=42)
-sample = np.mod(rng.normal(0,100, size=20), 2*np.pi)
+SEED=42
+POINTS=20
+rng = np.random.default_rng(seed=SEED)
+sample = np.sort(np.mod(rng.normal(0,100, size=POINTS), 2*np.pi))
 (X, Y) = e(sample)
 
 # Offsets
