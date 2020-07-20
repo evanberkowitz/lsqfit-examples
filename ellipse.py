@@ -36,11 +36,11 @@ sample = np.sort(np.mod(rng.normal(0,100, size=POINTS), 2*np.pi))
 (X, Y) = e(sample)
 
 # Offsets
-bumpX = 0.2*rng.random(size=len(X))
-bumpY = 0.2*rng.random(size=len(Y))
+bumpX = 0.2*(2*rng.random(size=POINTS)-1)
+bumpY = 0.2*(2*rng.random(size=POINTS)-1)
 # Uncertainties
-eX = rng.normal(0.15, 0.05, size=len(X))
-eY = rng.normal(0.15, 0.05, size=len(Y))
+eX = rng.normal(0.15, 0.05, size=POINTS)
+eY = rng.normal(0.15, 0.05, size=POINTS)
 
 X = np.array([gv.gvar(x+dx, ex) for x, dx, ex in zip(X, bumpX, eX)])
 Y = np.array([gv.gvar(y+dy, ey) for y, dy, ey in zip(Y, bumpY, eY)])
@@ -81,7 +81,7 @@ print("\n\nSo, our dependent data is exactly known---it's 0 for each independent
 print("Therefore, take the approach of https://lsqfit.readthedocs.io/en/latest/overview.html#y-has-no-error-marginalization")
 print("We give a very small uncertainty on the constraint:\n")
 
-constraint = gv.gvar(['0(0.00001)'] * len(X))
+constraint = gv.gvar(['0(0.00001)'] * POINTS)
 print(constraint)
 
 
