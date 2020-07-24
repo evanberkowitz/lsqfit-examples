@@ -4,6 +4,9 @@ import gvar as gv
 import lsqfit as lsf
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patch
+
+import gvar_plot
 
 def banner(message):
     print(f"\n#\n#\t{message}\n#\n")
@@ -12,10 +15,10 @@ def banner(message):
 
 def ellipse(a, b, phi=0, x0=0, y0=0):
     def curried(theta):
-        return [
+        return np.array([
                 x0 + a*np.cos(theta)*np.cos(phi) - b*np.sin(theta)*np.sin(phi),
                 y0 + b*np.sin(theta)*np.cos(phi) + a*np.cos(theta)*np.sin(phi)
-               ]
+               ])
     return curried
 
 a=3
@@ -61,7 +64,7 @@ priors = {
     'x0': gv.gvar('10(3)'),
     'y0': gv.gvar('12(2)'),
     'phi': gv.gvar('0(0.78)'),
-    'a':  gv.gvar('2(2)'),
+    'log(a-b)':  gv.log(gv.gvar('2(2)')),
     'b':  gv.gvar('2(2)'),
 }
 
@@ -97,42 +100,42 @@ def ellipse_fit(p):
     dY = p['Y'] - p['y0']
     c = np.cos(p['phi'])
     s = np.sin(p['phi'])
-    asq = p['a']**2
+    asq = (p['a-b']+p['b'])**2
     bsq = p['b']**2
     return (dX * c + dY * s)**2 / asq + (dX * s - dY * c)**2 / bsq - 1
 
 banner("RESULTS")
 
 fit = lsf.nonlinear_fit(data=constraint, prior=priors, fcn=ellipse_fit)
+# Store a in the fit, as some functions have an argument called a.
+# Is there a way to show this in the formatted fit result?
+# Like where a-b is shown, under the line of dashes.
+fit.p['a'] = fit.p['a-b'] + fit.p['b']
 print(fit)
+
+print(f"              a     {fit.p['a-b']+fit.p['b']}")
 
 banner("VISUALIZATION")
 
 print("Now we would like to visualize the best-fit ellipse.")
 print("That isn't so bad, just plug the fit results to get a new ellipse.")
 
-best_fit = ellipse(fit.p['a'], fit.p['b'], fit.p['phi'], fit.p['x0'], fit.p['y0'])
-result = best_fit(theta)
-# Turn gvars in floats
-sdev   = np.array([[x.sdev for x in r] for r in result])
-result = np.array([[x.mean for x in r] for r in result])
+best_fit = ellipse(fit.p['a-b']+fit.p['b'], fit.p['b'], fit.p['phi'], fit.p['x0'], fit.p['y0'])
+bf = best_fit(theta)
 
 fig, ax = plt.subplots()
-for sigma in [0,1,2]:
-    ax.plot(*(result+sigma*sdev), linestyle='none', marker=',')
-    ax.plot(*(result-sigma*sdev), linestyle='none', marker=',', color=ax.lines[-1].get_color())
-ax.plot(*exact, linestyle='none', marker=',', color='black')
-ax.errorbar([x.mean for x in X], [y.mean for y in Y], xerr = [x.sdev for x in X], yerr = [y.sdev for y in Y],
-        linestyle='none',
-        color='black',
-        zorder = 10,
-        )
-ax.set_title("Best-fit ellipse and data points")
+
+ax.set_title('Zillions of ellipses make an error band.')
+ax.plot(*exact, color='black', marker=',', linestyle='none')
+# First we draw the best-fit value.
+gvar_plot.mean(ax, *bf, color='darkgreen')
+# For each point on the best fit, we draw three ellipses around it; superposed they make a band.
+gvar_plot.band(ax, *bf, sigma=[1,2,3], color='green', alpha=1/128)
+
+gvar_plot.errorbar(ax, X, Y, marker=',', color='black', linestyle='none')
+
 ax.set_xlim(6.5, 13.5)
 ax.set_ylim(10.5, 13.5)
 
-banner("REMAINING QUESTION")
-
-print(" - How can I visualize the error bands around the best-fit ellipse?")
 
 plt.show()
