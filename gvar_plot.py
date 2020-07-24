@@ -29,7 +29,7 @@ def ellipses(ax, x, y, sigma=[1], **kwargs):
         for s in sigma:
             # mpl.patches.Ellipse wants full axes, not semi-{minor,major} axes.
             # Hence the 2*.
-            axes = 2*np.sqrt(s*w)
+            axes = 2*s*np.sqrt(w)
             # Angle is in degrees...
             e = patches.Ellipse([a.mean, b.mean], *axes, angle=angle*180/np.pi, **defaults)
             ax.add_patch(e)
